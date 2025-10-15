@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface WelcomeAnimationProps {
   studentName: string;
@@ -9,55 +9,55 @@ interface WelcomeAnimationProps {
 
 export function WelcomeAnimation({ studentName, schoolName, onComplete }: WelcomeAnimationProps) {
   const [particles] = useState(() => {
-    // Generate minimal floating particles
-    return Array.from({ length: 15 }, (_, i) => ({
+    // Generate particles once on mount (reduced from 40 to 20)
+    return Array.from({ length: 20 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: Math.random() * 4 + 3,
+      delay: Math.random() * 3,
     }));
   });
   
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
-    }, 5000); // 5 seconds - swift and professional
+    }, 8000);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-      {/* Sophisticated gradient overlay */}
+    <div className="fixed inset-0 z-50 overflow-hidden" style={{ backgroundColor: '#000000' }}>
+      {/* Subtle animated gradient overlay */}
       <motion.div 
-        className="absolute inset-0"
+        className="absolute inset-0 opacity-70"
         animate={{
           background: [
-            'radial-gradient(circle at 30% 40%, rgba(30, 58, 138, 0.3) 0%, transparent 50%)',
-            'radial-gradient(circle at 70% 60%, rgba(21, 94, 117, 0.3) 0%, transparent 50%)',
-            'radial-gradient(circle at 30% 40%, rgba(30, 58, 138, 0.3) 0%, transparent 50%)',
+            'radial-gradient(circle at 30% 50%, rgba(37, 99, 235, 0.4) 0%, transparent 60%)',
+            'radial-gradient(circle at 70% 50%, rgba(249, 115, 22, 0.4) 0%, transparent 60%)',
+            'radial-gradient(circle at 30% 50%, rgba(37, 99, 235, 0.4) 0%, transparent 60%)',
           ],
         }}
-        transition={{ duration: 5, ease: "easeInOut" }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Minimal particles - subtle and refined */}
+      {/* Enhanced particle system */}
       <div className="absolute inset-0">
         {particles.map((particle) => (
           <motion.div
             key={particle.id}
-            className="absolute w-1 h-1 bg-blue-200/30 rounded-full"
+            className="absolute w-1 h-1 bg-white rounded-full shadow-lg"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
+              boxShadow: '0 0 10px rgba(255, 255, 255, 0.5)',
             }}
             animate={{
-              y: [0, -20, 0],
-              opacity: [0.2, 0.5, 0.2],
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
             }}
             transition={{
-              duration: particle.duration,
+              duration: 4,
               repeat: Infinity,
               delay: particle.delay,
               ease: "easeInOut",
@@ -66,105 +66,147 @@ export function WelcomeAnimation({ studentName, schoolName, onComplete }: Welcom
         ))}
       </div>
 
-      {/* Bengali Alpona Pattern - Subtle geometric design */}
-      <div className="absolute inset-0 overflow-hidden flex items-center justify-center opacity-[0.08]">
-        <motion.div
-          className="w-[700px] h-[700px]"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        >
-          <svg viewBox="0 0 400 400" className="w-full h-full">
-            {/* Alpona-inspired geometric pattern */}
-            {/* Outer square frame */}
-            <rect x="50" y="50" width="300" height="300" fill="none" stroke="white" strokeWidth="0.5" />
-            <rect x="70" y="70" width="260" height="260" fill="none" stroke="white" strokeWidth="0.5" />
-            
-            {/* Diagonal lines creating diamond patterns */}
-            <line x1="50" y1="50" x2="350" y2="350" stroke="white" strokeWidth="0.5" />
-            <line x1="350" y1="50" x2="50" y2="350" stroke="white" strokeWidth="0.5" />
-            
-            {/* Bengali lotus motif - simplified and geometric */}
+      {/* Indian Background Elements */}
+      {/* Lotus Pattern - Bottom Left */}
+      <motion.div
+        className="absolute bottom-32 left-16 opacity-8"
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg width="120" height="120" viewBox="0 0 120 120" className="text-orange-300">
+          <g stroke="currentColor" fill="currentColor" fillOpacity="0.1" strokeWidth="0.5">
             {[...Array(8)].map((_, i) => (
-              <g key={i} transform={`rotate(${i * 45} 200 200)`}>
-                {/* Petal shapes */}
-                <path
-                  d="M 200 200 L 190 150 Q 200 140 210 150 Z"
-                  fill="rgba(255, 255, 255, 0.4)"
-                  stroke="white"
-                  strokeWidth="0.5"
-                />
-              </g>
-            ))}
-            
-            {/* Concentric circles - traditional alpona element */}
-            {[80, 120, 160].map((r, i) => (
-              <circle
+              <ellipse
                 key={i}
-                cx="200"
-                cy="200"
-                r={r}
-                fill="none"
-                stroke="white"
-                strokeWidth="0.5"
-                opacity={0.6 - i * 0.1}
+                cx="60"
+                cy="60"
+                rx="35"
+                ry="15"
+                transform={`rotate(${i * 45} 60 60)`}
               />
             ))}
-            
-            {/* Small decorative dots at cardinal points */}
-            {[0, 90, 180, 270].map((angle, i) => {
-              const rad = (angle * Math.PI) / 180;
-              const x = 200 + Math.cos(rad) * 140;
-              const y = 200 + Math.sin(rad) * 140;
-              return (
-                <circle key={`dot-${i}`} cx={x} cy={y} r="3" fill="white" opacity="0.6" />
-              );
-            })}
+            <circle cx="60" cy="60" r="8" fill="currentColor" fillOpacity="0.3" />
+          </g>
+        </svg>
+      </motion.div>
+
+      <motion.div
+        className="absolute top-2/3 right-1/4 opacity-6"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+      >
+        <svg width="40" height="40" viewBox="0 0 40 40" className="text-yellow-300">
+          <g stroke="currentColor" fill="currentColor" fillOpacity="0.1" strokeWidth="0.5">
+            {[...Array(6)].map((_, i) => (
+              <line
+                key={i}
+                x1="20"
+                y1="5"
+                x2="20"
+                y2="35"
+                transform={`rotate(${i * 60} 20 20)`}
+              />
+            ))}
+            <circle cx="20" cy="20" r="8" />
+            <circle cx="20" cy="20" r="3" fill="currentColor" fillOpacity="0.3" />
+          </g>
+        </svg>
+      </motion.div>
+
+      {/* Om Symbol - Very subtle */}
+      <motion.div
+        className="absolute top-1/2 left-12 opacity-4"
+        animate={{ opacity: [0.04, 0.08, 0.04] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg width="80" height="80" viewBox="0 0 80 80" className="text-white">
+          <path
+            d="M25 35c0-8 6-12 12-12s12 4 12 12c0 4-2 8-6 10 4 2 6 6 6 10 0 8-6 12-12 12s-12-4-12-12c0-4 2-8 6-10-4-2-6-6-6-10z"
+            stroke="currentColor"
+            fill="none"
+            strokeWidth="0.5"
+          />
+          <circle cx="40" cy="25" r="3" fill="currentColor" fillOpacity="0.2" />
+        </svg>
+      </motion.div>
+
+      {/* Paisley patterns */}
+      <motion.div
+        className="absolute top-1/4 right-1/3 opacity-5"
+        animate={{ rotate: [0, 10, -10, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg width="50" height="50" viewBox="0 0 50 50" className="text-pink-300">
+          <path
+            d="M25 10c8 0 15 7 15 15 0 8-7 15-15 15-4 0-8-2-10-5 2-3 5-7 5-10 0-8-7-15 5-15z"
+            stroke="currentColor"
+            fill="currentColor"
+            fillOpacity="0.1"
+            strokeWidth="0.5"
+          />
+        </svg>
+      </motion.div>
+
+      {/* Indian Stars */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute opacity-10"
+          style={{
+            left: `${20 + (i * 15)}%`,
+            top: `${15 + (i * 12)}%`,
+          }}
+          animate={{
+            opacity: [0.1, 0.3, 0.1],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 4 + i,
+            repeat: Infinity,
+            delay: i * 0.5,
+            ease: "easeInOut",
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-white">
+            <path
+              d="M10 2l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"
+              fill="currentColor"
+              fillOpacity="0.4"
+            />
           </svg>
         </motion.div>
-      </div>
+      ))}
 
-      {/* Kerala mural art inspired corner decorations */}
-      <div className="absolute top-0 left-0 w-32 h-32 opacity-[0.12]">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          {/* Traditional Kerala mural corner motif */}
-          <path
-            d="M 0 0 Q 30 0 30 30 L 30 50 Q 30 30 50 30 L 30 30 Q 0 30 0 0"
-            fill="white"
-            stroke="white"
-            strokeWidth="0.5"
-          />
-          <circle cx="25" cy="25" r="8" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="25" cy="25" r="4" fill="white" opacity="0.6" />
-        </svg>
-      </div>
-
-      <div className="absolute bottom-0 right-0 w-32 h-32 opacity-[0.12] rotate-180">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          <path
-            d="M 0 0 Q 30 0 30 30 L 30 50 Q 30 30 50 30 L 30 30 Q 0 30 0 0"
-            fill="white"
-            stroke="white"
-            strokeWidth="0.5"
-          />
-          <circle cx="25" cy="25" r="8" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="25" cy="25" r="4" fill="white" opacity="0.6" />
-        </svg>
-      </div>
-
-      {/* Subtle tricolor accent - refined and minimal */}
+      {/* Geometric Indian pattern - corners */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 opacity-20"
+        className="absolute top-8 left-8 opacity-6"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+      >
+        <svg width="60" height="60" viewBox="0 0 60 60" className="text-cyan-300">
+          <g stroke="currentColor" fill="none" strokeWidth="0.5">
+            <rect x="15" y="15" width="30" height="30" transform="rotate(45 30 30)" />
+            <rect x="20" y="20" width="20" height="20" transform="rotate(45 30 30)" />
+            <circle cx="30" cy="30" r="5" />
+          </g>
+        </svg>
+      </motion.div>
+
+      {/* Enhanced tricolor accent */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-2 opacity-80 shadow-lg"
         style={{
           background: 'linear-gradient(90deg, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%)',
+          boxShadow: '0 2px 10px rgba(255, 153, 51, 0.3)',
         }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
       />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        {/* Professional logo with refined design */}
+  <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4" style={{ justifyContent: 'center', minHeight: '100vh', paddingTop: 0, paddingBottom: 0 }}>
+        {/* Minimal animated logo */}
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ 
@@ -172,193 +214,255 @@ export function WelcomeAnimation({ studentName, schoolName, onComplete }: Welcom
             opacity: 1,
           }}
           transition={{ 
-            duration: 0.5,
+            duration: 0.8,
             ease: [0.34, 1.56, 0.64, 1],
           }}
-          className="mb-10"
+          className="mb-8"
         >
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28">
-            {/* Subtle glow */}
-            <motion.div 
-              className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-2xl"
-              animate={{
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            
-            {/* Logo container - professional gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-700 via-blue-800 to-cyan-900 rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden border border-white/10">
-              {/* Subtle pattern overlay */}
-              <div className="absolute inset-0 opacity-10">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
-                  </pattern>
-                  <rect width="100" height="100" fill="url(#grid)" />
-                </svg>
-              </div>
-              
-              {/* Shield icon - clean and professional */}
-              <svg viewBox="0 0 24 24" className="w-12 h-12 sm:w-14 sm:h-14 text-white relative z-10" fill="currentColor">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center">
+              <svg viewBox="0 0 24 24" className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor">
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               </svg>
             </div>
-            
-            {/* Minimal border accent */}
-            <div className="absolute -inset-0.5 border border-blue-400/20 rounded-2xl" />
           </div>
         </motion.div>
 
-        {/* Welcome text - professional and clean */}
+        {/* Clean welcome text */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
+          transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
           className="text-center mb-8"
         >
-          <div className="text-sm uppercase tracking-[0.3em] text-blue-300/60 mb-2">
-            Welcome to DPRES
-          </div>
+          <h1 
+            className="text-xl sm:text-2xl md:text-3xl mb-3 tracking-wide"
+            style={{
+              background: 'linear-gradient(135deg, #60A5FA, #F97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontWeight: '600',
+            }}
+          >
+            WELCOME TO DPRES
+          </h1>
           <motion.div 
-            className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"
+            className="h-px w-24 mx-auto bg-white/20"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ delay: 0.5, duration: 0.4 }}
+            transition={{ delay: 1.5, duration: 0.6 }}
           />
         </motion.div>
 
-        {/* Student name - elegant presentation */}
+        {/* Student name - Creative text effect */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ 
-            delay: 0.8, 
-            duration: 0.4,
+            delay: 2.2, 
+            duration: 0.8,
             ease: "easeOut",
           }}
-          className="relative mb-8"
+          className="relative mb-6"
         >
-          <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl px-10 sm:px-16 py-5 border border-white/10 shadow-xl">
-            {/* Subtle corner accents inspired by alpona */}
-            <div className="absolute top-0 left-0 w-6 h-6">
-              <svg viewBox="0 0 24 24" className="w-full h-full text-blue-300/30">
-                <circle cx="4" cy="4" r="2" fill="currentColor" />
-                <line x1="4" y1="4" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
-                <line x1="4" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
-              </svg>
-            </div>
-            <div className="absolute top-0 right-0 w-6 h-6 rotate-90">
-              <svg viewBox="0 0 24 24" className="w-full h-full text-blue-300/30">
-                <circle cx="4" cy="4" r="2" fill="currentColor" />
-                <line x1="4" y1="4" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
-                <line x1="4" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
-              </svg>
-            </div>
-            <div className="absolute bottom-0 left-0 w-6 h-6 -rotate-90">
-              <svg viewBox="0 0 24 24" className="w-full h-full text-blue-300/30">
-                <circle cx="4" cy="4" r="2" fill="currentColor" />
-                <line x1="4" y1="4" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
-                <line x1="4" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
-              </svg>
-            </div>
-            <div className="absolute bottom-0 right-0 w-6 h-6 rotate-180">
-              <svg viewBox="0 0 24 24" className="w-full h-full text-blue-300/30">
-                <circle cx="4" cy="4" r="2" fill="currentColor" />
-                <line x1="4" y1="4" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
-                <line x1="4" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
-              </svg>
-            </div>
-            
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-center tracking-wide text-white">
-              {studentName}
-            </h2>
-          </div>
+          {/* Glowing backdrop effect */}
+          <motion.div
+            className="absolute inset-0 blur-3xl opacity-30"
+            style={{
+              background: 'radial-gradient(ellipse, rgba(37, 99, 235, 0.6) 0%, rgba(249, 115, 22, 0.6) 50%, transparent 70%)',
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          
+          {/* Main text with gradient and shadow */}
+          <h2
+            className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center tracking-wide z-10 px-4"
+            style={{
+              fontWeight: '800',
+              background: 'linear-gradient(135deg, #ffffff 0%, #f0f9ff 30%, #dbeafe 60%, #ffffff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              letterSpacing: '0.02em',
+              textShadow: '0 0 40px rgba(255, 255, 255, 0.3)',
+              filter: 'drop-shadow(0 4px 20px rgba(37, 99, 235, 0.4))',
+            }}
+          >
+            {studentName}
+          </h2>
+          
+          {/* Animated underline */}
+          <motion.div
+            className="mx-auto mt-3"
+            style={{
+              height: '2px',
+              background: 'linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.8), rgba(249, 115, 22, 0.8), transparent)',
+            }}
+            initial={{ width: '0%' }}
+            animate={{ width: '50%' }}
+            transition={{ delay: 3, duration: 1, ease: "easeOut" }}
+          />
         </motion.div>
 
-        {/* School name - refined styling */}
+        {/* School name - Creative text effect */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 0.4 }}
-          className="text-center mb-10"
+          transition={{ delay: 3.2, duration: 0.6 }}
+          className="text-center mb-24 relative"
         >
-          <div className="bg-white/5 backdrop-blur-md rounded-xl px-8 sm:px-12 py-3 border border-white/10">
-            <p className="text-base sm:text-lg text-blue-100/80">
-              {schoolName}
-            </p>
-          </div>
+          {/* Subtle glow effect */}
+          <motion.div
+            className="absolute inset-0 blur-2xl opacity-20"
+            style={{
+              background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.4) 0%, transparent 70%)',
+            }}
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.2, 0.35, 0.2],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          
+          {/* School name with elegant styling */}
+          <p 
+            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl z-10 px-4"
+            style={{ 
+              fontWeight: '600',
+              background: 'linear-gradient(135deg, #e2e8f0 0%, #ffffff 50%, #f1f5f9 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              letterSpacing: '0.05em',
+              textShadow: '0 2px 10px rgba(255, 255, 255, 0.2)',
+              filter: 'drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15))',
+            }}
+          >
+            {schoolName}
+          </p>
+          
+          {/* Decorative elements */}
+          <motion.div
+            className="flex justify-center mt-3 gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.8, duration: 0.8 }}
+          >
+            <div className="w-1 h-1 rounded-full bg-white/40"></div>
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent self-center"></div>
+            <div className="w-1 h-1 rounded-full bg-white/40"></div>
+          </motion.div>
         </motion.div>
 
-        {/* Subtitle - professional tone */}
+        {/* Subtitle - greyish color */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.4 }}
-          className="text-blue-200/50 text-sm text-center max-w-md px-4"
+          transition={{ delay: 4, duration: 0.6 }}
+          className="text-gray-400 text-base sm:text-lg text-center max-w-lg px-4 mb-16 mt-8"
+          style={{ 
+            textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+            lineHeight: '1.6',
+            letterSpacing: '0.01em',
+            color: '#9ca3af',
+          }}
         >
-          Building resilience through knowledge and preparation
+          Preparing for excellence in disaster readiness
         </motion.p>
 
-        {/* Refined loading indicator */}
+        {/* Three dots status indicator at the bottom */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 0.3 }}
-          className="mt-12 flex gap-2"
+          transition={{ delay: 4.5, duration: 0.5 }}
+          className="flex gap-2 mb-8 justify-center"
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 32 }}
         >
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="w-1.5 h-1.5 bg-blue-300/50 rounded-full"
+              className="w-2 h-2 bg-white/50 rounded-full"
               animate={{
-                opacity: [0.3, 1, 0.3],
-                scale: [1, 1.2, 1],
+                scale: [1, 1.3, 1],
+                opacity: [0.5, 0.9, 0.5],
               }}
               transition={{
-                duration: 1.5,
+                duration: 2,
                 repeat: Infinity,
-                delay: i * 0.2,
+                delay: i * 0.4,
                 ease: "easeInOut",
               }}
             />
           ))}
         </motion.div>
 
-        {/* Professional progress bar */}
+        {/* Removed duplicate loading dots */}
+
+        {/* Clean progress bar */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 3, duration: 0.3 }}
-          className="mt-6 w-64 h-0.5 bg-white/10 rounded-full overflow-hidden"
+          transition={{ delay: 5.5, duration: 0.5 }}
+          className="mt-6 w-56 h-1 bg-white/10 rounded-full overflow-hidden"
         >
           <motion.div
-            className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"
+            className="h-full bg-gradient-to-r from-blue-500 to-orange-500"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ duration: 2, ease: "easeInOut" }}
+            transition={{ duration: 2.5, ease: "easeInOut" }}
           />
         </motion.div>
 
-        {/* Bengali-inspired bottom decoration - minimal and elegant */}
+        {/* Enhanced Indian motif at bottom */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 0.15, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.15 }}
+          transition={{ delay: 2, duration: 1 }}
           className="absolute bottom-16"
         >
-          <svg width="100" height="30" viewBox="0 0 100 30" className="text-white" fill="none" stroke="currentColor">
-            {/* Simple alpona-inspired motif */}
-            <circle cx="50" cy="15" r="8" strokeWidth="0.5" />
-            <circle cx="50" cy="15" r="12" strokeWidth="0.5" opacity="0.5" />
-            <circle cx="30" cy="15" r="4" strokeWidth="0.5" />
-            <circle cx="70" cy="15" r="4" strokeWidth="0.5" />
-            <line x1="34" y1="15" x2="42" y2="15" strokeWidth="0.5" />
-            <line x1="58" y1="15" x2="66" y2="15" strokeWidth="0.5" />
+          <svg width="120" height="60" viewBox="0 0 120 60" className="text-white" fill="none" stroke="currentColor">
+            {/* Traditional Indian border pattern */}
+            <g strokeWidth="0.5">
+              {/* Central lotus */}
+              <g transform="translate(60, 30)">
+                {[...Array(8)].map((_, i) => (
+                  <ellipse
+                    key={i}
+                    rx="12"
+                    ry="4"
+                    transform={`rotate(${i * 45})`}
+                    fillOpacity="0.1"
+                    fill="currentColor"
+                  />
+                ))}
+                <circle r="3" fill="currentColor" fillOpacity="0.3" />
+              </g>
+              
+              {/* Side decorative elements */}
+              <circle cx="20" cy="30" r="6" strokeWidth="0.3" />
+              <circle cx="100" cy="30" r="6" strokeWidth="0.3" />
+              
+              {/* Connecting patterns */}
+              <path d="M26 30 Q 40 20 54 30" strokeWidth="0.3" />
+              <path d="M66 30 Q 80 20 94 30" strokeWidth="0.3" />
+              
+              {/* Small decorative dots */}
+              <circle cx="35" cy="25" r="1" fill="currentColor" fillOpacity="0.4" />
+              <circle cx="85" cy="25" r="1" fill="currentColor" fillOpacity="0.4" />
+            </g>
           </svg>
         </motion.div>
       </div>
